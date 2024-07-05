@@ -31,17 +31,3 @@ chmod +x ./poc.sh
 
 > Tested on docker engine version 20.10.5+dfsg1
 
-# Mitigation
-
-It is crucial to update Docker to version 20.10.9 or higher to address this vulnerability.
-
-
-## TO-DO
-
-- [ ] Add Many Cases for other privilige escalation scenarios
-- [x] Fix Bugs
-
-
-## Credit
-
-> https://www.cyberark.com/resources/threat-research-blog/how-docker-made-me-more-capable-and-the-host-less-secure
