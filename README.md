@@ -31,3 +31,6 @@ chmod +x ./poc.sh
 
 > Tested on docker engine version 20.10.5+dfsg1
 
+If you want to investigate the attacks related to this Docker Engine, you can check out our guide on how to set up Wazuh for monitoring and detecting potential vulnerabilities in the **Docker Engine**. [Guide](https://sne-m23-sn.github.io/Vulnerable-Docker-Engine/Defense/)
+
+
