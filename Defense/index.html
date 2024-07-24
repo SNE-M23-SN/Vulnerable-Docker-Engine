@@ -1,0 +1,803 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Detecting Vulnerable-Docker-Engine</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="e1c1b4f3-3d8d-4136-a204-948a5bf3d706" class="page sans"><header><img class="page-cover-image" src="https://www.notion.so/images/page-cover/nasa_earth_grid.jpg" style="object-position:center 30.000000000000004%"/><div class="page-header-icon page-header-icon-with-cover"><span class="icon">😎</span></div><h1 class="page-title">Detecting Vulnerable-Docker-Engine</h1><p class="page-description"></p></header><div class="page-body"><p id="a3f0fc51-5659-4e8d-b61a-d055cd1c9d13" class=""><code>Team</code>:</p><ol type="1" id="d5531bc2-b987-4368-ac8a-d4a85df457b2" class="numbered-list" start="1"><li><mark class="highlight-blue"><strong>Khasan Abdurakhmanov</strong></mark></li></ol><ol type="1" id="68a30f32-1235-486c-9d8d-a6a2255a3901" class="numbered-list" start="2"><li><mark class="highlight-teal"><strong>Mbachan Fabrice</strong></mark></li></ol><ol type="1" id="2ecaf44f-ac40-438e-83af-85f142ba5d0b" class="numbered-list" start="3"><li><mark class="highlight-yellow"><strong>Ahmed Saad</strong></mark></li></ol><ol type="1" id="179ddf31-3322-4022-89a0-8fc4bc1d8700" class="numbered-list" start="4"><li><mark class="highlight-orange"><strong>Vanel Nara</strong></mark></li></ol><hr id="7cd5427a-057a-4329-8e0c-2c515551dc6f"/><nav id="06314e28-f9ae-4f6e-99d9-5f2a674ae82d" class="block-color-gray table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#5f951d1e-624d-4da8-9200-870dccdcb247">Introduction</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#046b1768-dbde-4f75-b89e-edae19be1a84">1. Tools and Setup</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#c7a4a0cc-3473-4a59-a0b5-ad0b13ca7e13">1.1 Vulnerable Docker Engine</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#9e67cd3c-9d7d-45b6-985e-c80dfa8b16cc">1.3 <strong>Wazuh - The Open Source Security Platform</strong></a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#bf7fde64-2c4a-42c6-93e8-629db07df8d2"><strong>1.3.1 Architecture</strong></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#cf3638be-d357-4355-a327-d91cf60b23ba">1.4 Deployment Methods</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#a18626b4-3b3c-4c6d-8648-0c3cca2fe278">1.4.1 <strong>Wazuh Docker deployment</strong></a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#9f30fde8-64f6-4e4f-93cc-c027c14a0ffa">1.4.2 Wazuh Manual Deployment</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#aa14c865-2be9-4bc6-aa41-7a76898521fe">1.4.3 Wazuh Cloud</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#29614bc7-6532-43df-a256-5cb1d090feed">2. Configuring Wazuh SIEM</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#413c3930-f1eb-4cc0-8360-7ae43b8f1d53">2.1 Configuring Wazuh to Monitor Docker Containers</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#d1948792-3165-412e-9963-3b7b6139bc20">2.1.1 Installing Wazuh Agent on Docker Host</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#4ee70d82-5ca4-43f8-96d6-58bf3888508c">2.1.2 Monitoring Docker events</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#996b33d6-cfc6-4539-b17e-437f0f434fac">2.1.3 <strong>Monitoring Docker container logs</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#7f85ed7b-3bf0-428e-9fa4-95530a005594">3. Configuring Vulnerable Docker Engine</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#41b9d7cc-0ac4-4a7f-9fbf-59b33daedb67">3.1 File Integrity Monitoring (FIM) with Wazuh</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#05858e1d-8e5f-499f-9395-acedba5b54e1">3.2 Audit Logging with Auditd</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#0b0e8c6d-5f77-46a3-ac24-4cdf3e69d52e">3.3 Alerting and Response</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#f9aefcce-b473-448f-b3a6-6c031882fd75">Conclusion</a></div></nav><hr id="baf1881a-62db-404f-92ea-b8bf0064d80b"/><h1 id="5f951d1e-624d-4da8-9200-870dccdcb247" class="">Introduction</h1><p id="037dbb3a-df68-4867-b46d-38b1a83d00cf" class="">In the modern landscape of containerized applications, <strong>Docker</strong> has become a key technology for deploying <em>scalable</em> and <em>portable</em> environments. However, with the increased usage of <strong>Docker</strong>, the threat landscape has also expanded, making <strong>Docker</strong> containers an attractive target for cyber attackers. Vulnerabilities within containers can lead to <em>severe breaches</em>, <em>data theft</em>, and <em>system compromises</em>. Therefore, it is crucial to implement robust security measures to monitor and protect these environments.</p><p id="458f60fc-931f-4f25-a4fe-e77d5ec9c38c" class=""><strong>Wazuh</strong>, an open-source security monitoring platform, provides comprehensive capabilities to detect and respond to security incidents in <strong>Docker</strong> environments. By leveraging <strong>Wazuh&#x27;s</strong> powerful <em>detection engine</em>, <em>custom rules</em>, and <em>real-time monitoring</em>, organizations can significantly enhance their ability to identify and prevent attacks targeting vulnerable <strong>Docker</strong> containers.</p><div id="237a8478-6a5f-4dcf-af56-a66e4a940a9b" class="column-list"><div id="57a7fdb0-1e91-463e-a395-b3e74f9bfa66" style="width:43.75%" class="column"><figure id="b9204c1d-9938-4821-80ea-f0332db8653c" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled.png"><img style="width:242px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled.png"/></a></figure></div><div id="3506542d-7de4-41c6-9c35-3cbc8608228c" style="width:56.25%" class="column"><p id="cd20824a-f514-42a3-ada2-ab40a5757300" class="">
+</p><figure id="56239a8d-849c-4144-a059-15910f3e0904" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/5c9462dc-2bdf-4e91-8c26-ac63e7d14ab6.png"><img style="width:432px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/5c9462dc-2bdf-4e91-8c26-ac63e7d14ab6.png"/></a></figure><p id="9f165c51-ae25-4322-acdd-5c09d70ba202" class="">
+</p></div></div><hr id="8e478304-38b6-412c-99cc-6ff4d54c0508"/><p id="1cc0d0d4-8cfc-4b38-9de2-b74f39a34e65" class="">This guide will walk you through configuring <strong>Wazuh</strong> to detect attacks exploiting vulnerabilities in the <strong>Docker</strong> engine. We will cover the necessary steps to set up the <strong>Docker Listener</strong> module, create custom <strong>decoders</strong> and <strong>rules</strong>, and analyze the relevant logs to identify potential attacks. By following these best practices, you can strengthen the security of your <strong>Docker</strong> infrastructure and minimize the risk of successful exploits.</p><h1 id="046b1768-dbde-4f75-b89e-edae19be1a84" class="">1. Tools and Setup</h1><p id="b76e5c27-3769-439d-b266-371653bbc47c" class="">Before diving into the specifics of configuring <strong>Wazuh</strong> for monitoring <strong>Docker</strong> containers, it&#x27;s essential to have a clear understanding of the tools involved and their setup. This section will cover the installation and basic setup of the <strong>Docker engine</strong>, deploying a vulnerable container, and providing an in-depth explanation of the <strong>Wazuh</strong> architecture.</p><h2 id="c7a4a0cc-3473-4a59-a0b5-ad0b13ca7e13" class="">1.1 Vulnerable Docker Engine</h2><p id="41652f29-f76f-466b-a38a-47f5e28b5cb4" class="">In this guide, we will be using a deliberately vulnerable <strong>Docker</strong> container to demonstrate the detection capabilities of <strong>Wazuh</strong>.</p><figure id="26e8c581-5904-49a1-b629-e529128867b5" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%201.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%201.png"/></a></figure><p id="e454c865-d027-468d-8db0-bfd5169b3171" class="">This project is designed as a vulnerable <strong>Docker engine</strong> for educational purposes. Its primary goal is to showcase vulnerabilities that frequently pose risks in the digital world.</p><p id="46abeabd-3fd8-48fd-bdf7-7810784ee9ea" class=""><strong>CVE-2021-41091</strong> is a flaw in <strong>Moby</strong> (<em>Docker Engine</em>) that allows <em>unprivileged</em> <strong>Linux</strong> users to traverse and execute programs within the data directory (usually located at <code>/var/lib/docker</code>) due to improperly restricted permissions. This vulnerability is present when containers contain executable programs with <em>extended permissions</em>, such as <code>setuid</code>. <em>Unprivileged</em> <strong>Linux</strong> users can discover and execute those programs, as well as modify files if the <strong>UID</strong> of the user on the host matches the file owner or group inside the container.</p><p id="171772d8-970c-47e1-8b42-ad701da1b425" class="">By providing a real-life simulation of this vulnerability, this project serves as an invaluable learning tool for a diverse range of individuals. To set up the vulnerable <strong>Docker Engine</strong>, simply install the specific version of <strong>Docker</strong> <code>20.10.5</code>. All the <code>deb</code> files for <strong>Debian</strong> distribution are available in the <a href="https://github.com/SNE-M23-SN/Vulnerable-Docker-Engine">repository</a>.</p><hr id="bc074702-932b-4b0e-bf25-cb355f8f8474"/><h2 id="9e67cd3c-9d7d-45b6-985e-c80dfa8b16cc" class="">1.3 <strong>Wazuh - The Open Source Security Platform</strong></h2><p id="2c520df4-eab6-42a1-a1f2-7f2122617e76" class=""><strong>Wazuh</strong> is a free and open source platform used for <em>threat prevention</em>, <em>detection</em>, and <em>response</em>. It is capable of protecting workloads across on-premises, <em><strong>virtualized</strong></em>, <em><strong>containerized</strong></em>, and <em><strong>cloud-based</strong></em> environments.</p><figure id="ee47f708-3781-4c74-96ee-e02250f356e6" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%202.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%202.png"/></a></figure><p id="67573020-c83c-4861-9bf8-ca5c7c37c8be" class=""><strong>Wazuh</strong> solution consists of an <em>endpoint security agent</em>, deployed to the monitored systems, and a <em>management server</em>, which collects and analyzes data gathered by the agents. Besides, <strong>Wazuh </strong>has been fully integrated with the <strong>Elastic Stack</strong>, providing a <em>search engine</em> and <em>data visualization</em> tool that allows users to navigate through their security alerts.</p><h3 id="bf7fde64-2c4a-42c6-93e8-629db07df8d2" class=""><strong>1.3.1 Architecture</strong></h3><p id="7769fcd1-34d4-4f6e-9416-e250b7c82d41" class="">The <strong>Wazuh</strong> architecture uses agents on monitored endpoints to forward security data to a central server. <strong>Agentless</strong> devices like <em>firewalls</em>, <em>switches</em>, <em>routers</em>, and access points can send log data via <strong>Syslog</strong>, <strong>SSH</strong>, or <strong>API</strong>. The server <em>decodes</em> and <em>analyzes</em> this information, then sends it to the <code>Wazuh indexer</code> for indexing and storage.</p><p id="df55ba80-bf0a-430d-b4e9-0a3c55fef9f9" class="">A <code>Wazuh indexer</code> cluster can have one or more nodes for read and write operations. Small deployments can use a <strong>single-node cluster</strong>, while <strong>multi-node clusters</strong> are better for large data volumes or high availability.</p><p id="48aaf9f2-7cb0-47ce-a8a5-ddf43489c1c3" class="">For production, it&#x27;s recommended to deploy the <code>Wazuh server</code> and <code>indexer</code> on different hosts. <code>Filebeat</code> securely forwards <strong>Wazuh</strong> alerts and events to the indexer cluster using <strong>TLS</strong> encryption.</p><p id="1a6675fc-5ca7-494a-9b38-715dcb4c651f" class="">The diagram below shows a <strong>Wazuh</strong> deployment architecture, illustrating the components and how the server and indexer nodes can be configured as clusters for <em>load balancing</em> and <em>high availability</em>.<br/> <br/></p><figure id="82c90377-0683-4626-80da-a9f915e3aa3a" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%203.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%203.png"/></a></figure><p id="bdaee276-6a61-4423-8ccf-3cbdedcc0619" class="">The <strong>Wazuh agent</strong> sends events to the <strong>Wazuh server</strong> for <em>analysis</em> and <em>threat detection</em>. The <strong>agent</strong> connects to the server on port <code>1514</code> (default, configurable). The server <em>decodes</em> and checks <em>events</em>, adding alert data if a rule is triggered. Events are saved to:</p><ul id="09a75187-8e72-47c8-b588-2d6efd9659ee" class="bulleted-list"><li style="list-style-type:disc"><code>/var/ossec/logs/archives/archives.json</code> (all events)</li></ul><ul id="7d83aaff-51f5-4de0-aaa7-685e979d66ea" class="bulleted-list"><li style="list-style-type:disc"><code>/var/ossec/logs/alerts/alerts.json</code> (events triggering high-priority rules, configurable)</li></ul><p id="dcb82834-29cd-4a2a-b0ee-6f9219e66ef9" class=""><strong>Wazuh</strong> uses <strong>AES</strong> encryption (128-bit blocks, 256-bit keys) by default, with optional Blowfish encryption.</p><p id="1cdf0856-f675-4d05-b6cb-fc8231863e23" class="">The <strong>Wazuh server</strong> uses <strong>Filebeat</strong> to send <em>alert</em> and <em>event data</em> to the <strong>Wazuh</strong> <strong>indexer</strong> with <strong>TLS </strong>encryption. <strong>Filebeat</strong> reads the server output and sends it to the indexer (default port 9200/TCP). The indexed data is then visualized using the <strong>Wazuh</strong> dashboard. The <strong>Wazuh dashboard</strong> queries the <strong>Wazuh RESTful API</strong> (default port 55000/TCP) to display configuration and status information of the <strong>Wazuh server</strong> and agents. It can also modify settings through API calls, with communication <em>encrypted</em> and <em>authenticated</em> by username and password.</p><hr id="7e294ebb-ebfd-474b-b725-94d64a3963a4"/><h2 id="cf3638be-d357-4355-a327-d91cf60b23ba" class="">1.4 Deployment Methods</h2><p id="70baa75e-6070-41c0-bacd-f6b29c26108c" class="">There are three methods to deploy <strong>Wazuh</strong>:</p><ol type="1" id="fe506e54-11d5-4c6d-8a2e-f5600d4a00ef" class="numbered-list" start="1"><li><strong>Wazuh via Docker:</strong> Deploy <strong>Wazuh</strong> components as <strong>Docker</strong> containers.<ul id="78b69eb3-d72f-467d-bdbf-c0ab74a488bd" class="bulleted-list"><li style="list-style-type:disc">Building Docker images for the Wazuh manager, indexer, and dashboard components</li></ul><ul id="b751cd7e-10dc-42b7-bdfb-392f176fe602" class="bulleted-list"><li style="list-style-type:disc">Configuring a multi-node Wazuh deployment using Docker Compose</li></ul><ul id="cc8c30f3-abd7-4f1a-923d-a88961edae25" class="bulleted-list"><li style="list-style-type:disc">Generating SSL/TLS certificates for secure communication between the Wazuh components</li></ul></li></ol><ol type="1" id="c94b4a2f-8aa6-46d5-8db0-f7eea06ca702" class="numbered-list" start="2"><li><strong>Wazuh Manual Installation:</strong> Install <strong>Wazuh</strong> components directly on the host operating system.<ul id="091fc373-7652-4449-9a9c-be74820b35fd" class="bulleted-list"><li style="list-style-type:disc">Installing the Wazuh central components (server, indexer, and dashboard) on one or more hosts</li></ul><ul id="e885fa02-23fc-4210-b9b0-e823bce8f698" class="bulleted-list"><li style="list-style-type:disc">Deploying the Wazuh agent on the endpoints to be monitored</li></ul><ul id="ae0e67ce-9382-4a0e-9fad-d67c2e1ab630" class="bulleted-list"><li style="list-style-type:disc">Configuring the Wazuh components and integrating them into the infrastructure</li></ul></li></ol><ol type="1" id="d7f898b7-2913-4d1a-82d9-cba033be11d4" class="numbered-list" start="3"><li><strong>Wazuh Cloud:</strong> Use the <strong>Wazuh Cloud</strong> service for a managed deployment.<ul id="645c57f1-5adf-4cfb-8af0-e1f91e367f9d" class="bulleted-list"><li style="list-style-type:disc">Wazuh Cloud hosts and manages all the Wazuh components in a single integrated platform</li></ul><ul id="cd4b82d0-3db4-4836-a3da-5f6f3bc9f374" class="bulleted-list"><li style="list-style-type:disc">It handles the installation, scaling, and updates of the Wazuh components</li></ul><ul id="fdbe21d2-f070-4a5e-832f-20dca66804d8" class="bulleted-list"><li style="list-style-type:disc">Wazuh Cloud provides a free trial to create and explore the cloud environment</li></ul><ul id="d4203eb6-c364-464f-b1e0-9f742955e41f" class="bulleted-list"><li style="list-style-type:disc">It offers predefined environment profiles (Small, Medium, Large) to cater to different needs</li></ul></li></ol><p id="24253b93-a62a-49d2-98cb-7c1171a42f09" class="">In summary, you can choose from these three options to set up <strong>Wazuh</strong> based on your specific requirements, infrastructure, and resource constraints.</p><h3 id="a18626b4-3b3c-4c6d-8648-0c3cca2fe278" class="">1.4.1 <strong>Wazuh Docker deployment</strong></h3><p id="e1d146c2-85a8-42bd-a154-3db99886b8e5" class="">You can deploy <strong>Wazuh</strong> as a <em>single-node</em> or <em>multi-node</em> stack.</p><ul id="71569a9f-5380-4ce2-961c-c75cb9ee2379" class="bulleted-list"><li style="list-style-type:disc"><strong>Single-node deployment</strong>: Deploys one <strong>Wazuh manager</strong>, <strong>indexer</strong>, and <strong>dashboard node</strong>.</li></ul><ul id="685627df-3a1e-46d8-ad9a-b04ac40603be" class="bulleted-list"><li style="list-style-type:disc"><strong>Multi-node deployment</strong>: Deploys two <strong>Wazuh</strong> <strong>manager nodes</strong> (one master and one worker), three <strong>Wazuh indexer nodes</strong>, and a <strong>Wazuh dashboard</strong> node.</li></ul><p id="1cdf2670-53e6-4ae8-97e9-5d2301d2ddac" class="">Both deployments use persistence and allow configuring certificates to secure communications between nodes. The multi-node stack is the only deployment that contains high availability.</p><p id="e76885bf-e886-4329-983e-5c8df98cb671" class="">In our case we will only consider <strong>Single-node deployment</strong>:</p><ol type="1" id="83246ddf-5247-45c7-bfd0-bf47db230989" class="numbered-list" start="1"><li><strong>Clone the Wazuh repository to your system:</strong></li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7f945397-b9e7-4187-8f24-f90ce4daacec" class="code"><code class="language-Bash">git clone https://github.com/wazuh/wazuh-docker.git -b v4.3.0</code></pre><figure id="583a1816-f877-4192-b948-74a59c25f175" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%204.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%204.png"/></a></figure><p id="6dd8d31e-2128-4132-836d-c23853bad389" class="">Provide a group of certificates for each node in the stack to secure communication between the nodes. You have two alternatives to provide these certificates:</p><ul id="a2465742-9466-459c-bdd0-1f66c56a766e" class="bulleted-list"><li style="list-style-type:disc"><strong>Generate self-signed certificates for each cluster node</strong><ul id="3f362491-83c2-44d6-a107-5a16a405187f" class="bulleted-list"><li style="list-style-type:circle">We have created a <strong>Docker</strong> image to automate certificate generation using the <strong>Wazuh</strong> certs gen tool.</li></ul><ul id="08af15b8-eeb5-4e0a-89ef-fc3e59c08907" class="bulleted-list"><li style="list-style-type:circle">If your system uses a proxy, add the following to the <code>generate-indexer-certs.yml</code> file. If not, skip this particular step:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b1b9b5f4-fa61-49ab-b6f0-6b816f87a807" class="code"><code class="language-Bash">environment:
+  - HTTP_PROXY=YOUR_PROXY_ADDRESS_OR_DNS</code></pre><p id="db01fa6d-21a9-4f6a-9410-9877c6e257df" class=""><strong>A completed example looks like:</strong></p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="40ab861d-78ab-4a02-b7e0-155ff8232bf0" class="code"><code class="language-Bash"># Wazuh App Copyright (C) 2017 Wazuh Inc. (License GPLv2)
+version: &#x27;3&#x27;
+
+services:
+  generator:
+    image: wazuh/wazuh-certs-generator:0.0.2
+    hostname: wazuh-certs-generator
+    volumes:
+      - ./config/wazuh_indexer_ssl_certs/:/certificates/
+      - ./config/certs.yml:/config/certs.yml
+    environment:
+      - HTTP_PROXY=YOUR_PROXY_ADDRESS_OR_DNS</code></pre></li></ul></li></ul><p id="7cd40f64-ea79-4367-a263-d50a93eebf34" class="">Execute the following command to get the desired certificates:</p><p id="976c6231-0bc0-480e-ac49-5ba70ed60c54" class=""><strong>Docker Compose version 2:</strong></p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1f7e8e76-40cf-47da-839c-11a77a0209b2" class="code"><code class="language-Bash">docker-compose -f generate-indexer-certs.yml run --rm generator</code></pre><p id="09a7e57f-4330-438b-8fee-4f59203f0ef0" class=""><strong>Docker Compose version 3:</strong></p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="32f546ea-367e-4e53-8da4-36468c44a819" class="code"><code class="language-Bash">docker compose -f generate-indexer-certs.yml run --rm generator</code></pre><figure id="1cb3f229-c985-415b-9ea3-7d898b3cca83" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%205.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%205.png"/></a></figure><p id="353915a9-df59-4730-825a-099512328793" class="">This saves the certificates into the <code>config/wazuh_indexer_ssl_certs</code> directory.</p><ol type="1" id="ee6ab90a-40aa-4b50-abe2-6fe7d0f3daac" class="numbered-list" start="2"><li><strong>Provide your own certificates for each node.</strong><ul id="28bce59b-d5ce-41dd-ba7a-748dd394cfb1" class="bulleted-list"><li style="list-style-type:disc">In case you have your own certificates, provision them as follows in the <code>config/wazuh_indexer_ssl_certs</code> directory:<br/><br/><strong>Wazuh indexer</strong>:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="43ab7c34-ac97-4af8-913d-053aaa6e491a" class="code"><code class="language-Bash">config/wazuh_indexer_ssl_certs/root-ca.pem
+config/wazuh_indexer_ssl_certs/wazuh.indexer-key.pem
+config/wazuh_indexer_ssl_certs/wazuh.indexer.pem
+config/wazuh_indexer_ssl_certs/admin.pem
+config/wazuh_indexer_ssl_certs/admin-key.pem</code></pre></li></ul><p id="38eff0a0-67e7-478e-9bca-f751cd82bc5e" class=""><strong>     Wazuh manager</strong>:<div class="indented"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="97ced7b3-5c79-4d30-8c5e-c3130433485c" class="code"><code class="language-Bash">config/wazuh_indexer_ssl_certs/root-ca-manager.pem
+config/wazuh_indexer_ssl_certs/wazuh.manager.pem
+config/wazuh_indexer_ssl_certs/wazuh.manager-key.pem</code></pre><p id="9b9f7ab6-9194-4d0e-bebf-be5b328fe0ce" class=""><strong>Wazuh dashboard</strong>:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c4a226a3-a1e5-491d-ab47-f715a12fa27d" class="code"><code class="language-Bash">config/wazuh_indexer_ssl_certs/wazuh.dashboard.pem
+config/wazuh_indexer_ssl_certs/wazuh.dashboard-key.pem
+config/wazuh_indexer_ssl_certs/root-ca.pem</code></pre></div></p></li></ol><ol type="1" id="3bcc687e-df44-4613-8492-7bf487db1664" class="numbered-list" start="3"><li><strong>Start the Wazuh single-node deployment using docker-compose:</strong><p id="b677ec5e-72b0-43d0-ba24-20da2dff74d1" class=""><strong>Foreground</strong>:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0097b847-c61d-4c14-8dc2-2508a749cb8e" class="code"><code class="language-Bash">docker-compose up</code></pre><figure id="ef3baf7d-b0f6-46cf-a345-1c9f31efedf0" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%206.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%206.png"/></a></figure><figure id="7063b58a-d25b-408e-818f-13b917a8959b" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%207.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%207.png"/></a></figure><p id="730dc9a2-7e9a-4f83-a0f2-d22daf6f2b30" class=""><strong>Background</strong>:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="80c13288-f615-483d-afb2-b48461033a7e" class="code"><code class="language-Bash">docker compose up -d</code></pre><figure id="244f7e74-0b9e-4a34-821f-55db30f40ef8" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%208.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%208.png"/></a></figure><p id="d57b07c1-eded-4e0a-ba3f-5e46c8305487" class="">The default <em>username</em> and <em>password</em> for the <strong>Wazuh</strong> <strong>dashboard</strong> are <code>admin</code> and <code>SecretPassword</code>. For <a href="https://documentation.wazuh.com/current/deployment-options/docker/wazuh-container.html#change-pwd-existing-usr">additional security</a>, you can change the <em>default password</em> for the <strong>Wazuh indexer</strong> <em>admin</em> user.</p><figure id="6ee55a7d-9c20-4976-88c2-19aa14afbdea" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%209.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%209.png"/></a></figure><figure id="a8f37872-d926-4d4f-acb4-305e46a749fb" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2010.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2010.png"/></a></figure><figure id="481c88eb-2801-4b0f-8f03-e967cf4f6c9a" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2011.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2011.png"/></a></figure><figure id="505a4e08-013e-4107-acc0-4a5c95819819" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2012.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2012.png"/></a></figure></li></ol><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="d4db6e62-24b7-4f7a-9c73-8d68cf147af4"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">It’s recommended to use <strong>Wazuh</strong> version <code>4.3</code>. If you want to deploy it via <strong>Docker</strong>, use a <strong>Linux OS</strong> because the <em>certificates</em> are not created properly on <strong>Windows OS</strong>.</div></figure><hr id="4e1435f3-176c-42f7-95e4-77fef9230f1d"/><h3 id="9f30fde8-64f6-4e4f-93cc-c027c14a0ffa" class="">1.4.2 Wazuh Manual Deployment</h3><p id="f329ac7e-6aa7-4412-b9f9-daf19ab99dc2" class="">The <strong>Wazuh indexer</strong> and <strong>Wazuh server</strong> can be installed on a <strong>single host</strong> or distributed across <strong>multiple hosts</strong> in a cluster configuration. There are two main installation methods for each <strong>Wazuh</strong> central component. Both methods provide instructions for installing the components either on a single host or on separate hosts.</p><p id="5c8708f1-1338-41d2-b6b1-6001c211983d" class="">For greater deployment flexibility and customization, you can start with the <strong>Wazuh indexer</strong> deployment. This approach allows for an all-in-one installation as well as the installation of components on separate servers.</p><p id="780eb28f-1bd0-49c4-881b-8fb79a96e256" class=""><strong>Here is the installation workflow you will follow:</strong></p><figure id="9f7b5980-8fe9-4584-95b0-e53a368da0d7" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2013.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2013.png"/></a></figure><blockquote id="08be70c1-73d0-4702-9734-2cb733f6f5b3" class="block-color-gray_background"><mark class="highlight-yellow"><strong>Wazuh Indexer</strong></mark></blockquote><p id="bc46f476-faed-4413-80eb-b69c84f274dd" class="">The <strong>Wazuh indexer</strong> is a highly scalable, full-text search and analytics engine. This central component indexes and stores alerts generated by the <strong>Wazuh server</strong>, providing near real-time data search and analytics capabilities.</p><p id="e94fda58-94ed-4648-91bb-41185171ea41" class="">You can install the <strong>Wazuh indexer</strong> on a <em>single host</em> or distribute it across multiple nodes in a cluster configuration. A clustered setup offers scalability, high availability, and improved performance.</p><p id="281e2ecd-3268-42c6-bf61-016add2a2378" class=""><strong>The installation process is divided into three stages.</strong></p><ol type="1" id="f969b723-a192-401f-977b-0226e459d60c" class="numbered-list" start="1"><li><code><strong>Initial configuration</strong></code></li></ol><ol type="1" id="9eaf07cc-85f6-48be-a267-73516423312e" class="numbered-list" start="2"><li><code><strong>Wazuh indexer nodes installation</strong></code></li></ol><ol type="1" id="4cce2d2d-0c38-41a9-b02f-5cb9d0ff57a8" class="numbered-list" start="3"><li><code><strong>Cluster initialization</strong></code><strong> </strong></li></ol><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="6d444dc2-dc6b-4f4b-ba64-0d6cbb12e8b2"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><strong>You need root user privileges to run all the commands described below.</strong></div></figure><blockquote id="b7e8b75e-5e1c-4736-9a43-215899c6e6ff" class=""><mark class="highlight-yellow"><strong>1. Initial configuration</strong></mark></blockquote><p id="6926fcf8-985c-4dbc-a1d8-1fd085eb4256" class="">Indicate your deployment configuration, create the SSL certificates to encrypt communications between the Wazuh components, and generate random passwords to secure your installation.</p><ol type="1" id="4a90aa18-cdc3-4027-82be-ae112768c88a" class="numbered-list" start="1"><li><strong>Download the Wazuh installation assistant and the configuration file.</strong><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e2860129-ff43-4c2b-8677-7aaa98355123" class="code"><code class="language-Bash">curl -sO https://packages.wazuh.com/4.3/wazuh-install.sh
+curl -sO https://packages.wazuh.com/4.3/config.yml</code></pre><figure id="0dd1faab-5e1f-4c80-8409-94fdabcad6eb" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2014.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2014.png"/></a></figure></li></ol><ol type="1" id="4fbd5029-f7c9-4b33-bab5-9c552a9ea0b1" class="numbered-list" start="2"><li><strong>Edit the </strong><code><strong>./config.yml</strong></code><strong> and replace the node names and IP values with the corresponding names and IP addresses.</strong> You need to do this for all <strong>Wazuh server</strong>, <strong>Wazuh  indexer</strong>, and <strong>Wazuh dashboard</strong> nodes. Add as many node fields as needed.<figure id="60e459a2-f3b6-43d3-b8a6-fd2f002cf250" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2015.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2015.png"/></a></figure></li></ol><ol type="1" id="a6a516de-2c0a-49a1-b0f7-008a2d30cb2a" class="numbered-list" start="3"><li><strong>Run the assistant with the option</strong> <code>--generate-config-files</code> to generate the <strong>Wazuh cluster</strong> key, certificates, and passwords necessary for installation. You can find these files in <code>./wazuh-install-files.tar</code>.<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ef0a9233-009f-4cd4-a03e-da894f978249" class="code"><code class="language-Bash">bash wazuh-install.sh --generate-config-files</code></pre><figure id="4ffc0178-2985-4cc0-a139-1c5b1486c3ae" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2016.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2016.png"/></a></figure><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="d2f0ae2c-d030-4aa7-9b8f-80ffb41b5fe5"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">Our system does not comply with recommended considerations, which is why we use the -i option to ignore unnecessary checks.</div></figure><ol type="1" id="65aec6c2-3d72-4366-a6af-afee7e60feaa" class="numbered-list" start="4"><li>Copy the <code>wazuh-install-files.tar</code> file to all the servers of the distributed deployment, including the <strong>Wazuh server</strong>, the <strong>Wazuh indexer</strong>, and the <strong>Wazuh dashboard</strong> nodes. This can be done by using the <code>scp</code> utility.</li></ol></li></ol><hr id="b02fd972-f7c0-49c5-a462-f15b6ebecd74"/><blockquote id="8f3f057c-dffa-43bf-b15e-c8b794ecb145" class=""><mark class="highlight-yellow"><strong>2. Wazuh indexer nodes installation</strong></mark></blockquote><p id="c257f99a-a68c-453b-8687-7ad9b4b0168a" class="">Install and configure the <strong>Wazuh</strong> indexer nodes.</p><ol type="1" id="92a6829d-b390-4293-9875-7bf116643f00" class="numbered-list" start="1"><li>Download the Wazuh installation assistant.<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="49d7fb75-56c7-4f1c-80ca-80f85cba67f3" class="code"><code class="language-Bash" style="white-space:pre-wrap;word-break:break-all">curl -sO https://packages.wazuh.com/4.3/wazuh-install.sh</code></pre></li></ol><ol type="1" id="687462f1-3655-4361-a5b3-cbe52df60bea" class="numbered-list" start="2"><li>Run the assistant with the option <code>-wazuh-indexer</code> and the node name to install and configure the <strong>Wazuh indexer</strong>. The node name must be the same one used in <code>config.yml</code> for the initial configuration, for example, <code>node-1</code>.<figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="45482174-c51c-4a5d-927d-374c0b2d1297"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">Make sure that a copy of <code>wazuh-install-files.tar</code>, created during the initial configuration step, is placed in your working directory.</div></figure><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="239c4358-21be-4021-9c66-0ee2cb7503db" class="code"><code class="language-Bash">bash wazuh-install.sh --wazuh-indexer node-1</code></pre><figure id="1a3b5cbe-1ba8-4874-8a0e-f2ae02984eda" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2017.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2017.png"/></a></figure><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="dee4ee2e-6a8a-43d0-9348-9cdeab33cf6f"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">Our system does not comply with recommended considerations, which is why we use the -i option to ignore unnecessary checks.</div></figure><p id="cc70111b-6cca-4c3b-b7c2-05b7d7b5188c" class="">Repeat this stage of the installation process for every <strong>Wazuh indexer</strong> node in your cluster. Then proceed with initializing your <strong>single-node</strong> or <strong>multi-node</strong> cluster in the next stage.</p><hr id="71dfa7fd-4fe0-47ff-b899-7aff93378e07"/></li></ol><blockquote id="85a573fd-723b-45bc-a170-3ecd1bd14477" class=""><mark class="highlight-yellow"><strong>3. Cluster initialization</strong></mark></blockquote><p id="e095dcea-ce18-4618-a352-51ddb6483834" class="">The final stage of installing the <strong>Wazuh indexer</strong> <em>single-node</em> or <em>multi-node</em> cluster consists of running the security admin script.</p><ol type="1" id="f8a9cb6e-5f1c-4be4-afc9-dab47f83ffef" class="numbered-list" start="1"><li>Run the Wazuh installation assistant with option <code>-start-cluster</code> on any <strong>Wazuh indexer</strong> node to load the new certificates information and start the cluster.<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="8105ea76-d5c4-405b-823e-74a49748245e" class="code"><code class="language-Bash">bash wazuh-install.sh --start-cluster</code></pre><figure id="85e5c177-778a-4715-9585-acbd963053f6" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2018.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2018.png"/></a></figure><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="1d8a508a-985f-42d5-a3a9-7c446ede8f10"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">You only have to initialize the cluster once, there is no need to run this command on every node.</div></figure></li></ol><blockquote id="2d2dab5e-a168-4772-a240-d1bdc98bbfbb" class=""><mark class="highlight-teal"><strong>Testing the cluster installation</strong></mark></blockquote><ol type="1" id="a7177ba1-102a-4499-8623-003cb54b0759" class="numbered-list" start="1"><li>Run the following command to get the <em>admin</em> password:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7585443a-b8f9-497a-867b-08b36c982262" class="code"><code class="language-Bash" style="white-space:pre-wrap;word-break:break-all">curl -k -u admin:&lt;ADMIN_PASSWORD&gt; https://&lt;WAZUH_INDEXER_IP&gt;:9200</code></pre><figure id="681dd7cb-4f36-46de-927f-97bf8d949961" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2019.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2019.png"/></a></figure></li></ol><ol type="1" id="ba622c3a-641f-4bab-9fb2-c11e5e7c2de5" class="numbered-list" start="2"><li>Run the following command to confirm that the installation is successful. Replace <code>&lt;ADMIN_PASSWORD&gt;</code> with the password gotten from the output of the previous command. Replace <code>&lt;WAZUH_INDEXER_IP&gt;</code> with the configured <strong>Wazuh indexer IP </strong>address:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="4d95537e-4c0b-4423-88b7-59da567b200a" class="code"><code class="language-Bash">curl -k -u admin:&lt;ADMIN_PASSWORD&gt; https://&lt;WAZUH_INDEXER_IP&gt;:9200</code></pre><figure id="2bce7adb-acb9-4197-857a-2983b733161b" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2020.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2020.png"/></a></figure></li></ol><ol type="1" id="9983daa0-6f38-4630-9201-a0e47103b3e7" class="numbered-list" start="3"><li>Replace <code>&lt;WAZUH_INDEXER_IP&gt;</code> and <code>&lt;ADMIN_PASSWORD&gt;</code>, and run the following command to check if the cluster is working correctly:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="aec8424c-e978-42ee-8662-ef185753ec45" class="code"><code class="language-Bash">curl -k -u admin:&lt;ADMIN_PASSWORD&gt; https://&lt;WAZUH_INDEXER_IP&gt;:9200/_cat/nodes?v</code></pre><figure id="d5a7abab-db1a-4314-828c-a3fc022c2fe5" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2021.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2021.png"/></a></figure></li></ol><p id="caab9c7f-fed9-4aab-a2b9-2fda9050195f" class="">The <strong>Wazuh indexer</strong> is now successfully installed, and you can proceed with installing the <strong>Wazuh server</strong>. </p><blockquote id="6d721b4e-830a-481e-840b-776674ca4a95" class=""><mark class="highlight-blue"><strong>Wazuh Server</strong></mark></blockquote><p id="8468fae7-1103-471d-9699-3070b57bbbe0" class="">The <strong>Wazuh server</strong> analyzes data received from <strong>Wazuh agents</strong>, triggering alerts when threats or anomalies are detected. It also allows for remote management of agent configurations and monitoring their status.</p><p id="9627d03c-2c56-4e08-a772-7cd22cdbde73" class="">You can install the <strong>Wazuh server</strong> on a <em>single host</em> or distribute it across <em>multiple nodes</em> in a cluster configuration. Multi-node configurations offer high availability and improved performance. When combined with a network load balancer, this setup can efficiently utilize its capacity.</p><figure id="f8ccce78-b5b0-4b79-8da9-3af63ab47779" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2022.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2022.png"/></a></figure><blockquote id="3690b46b-4b7d-416c-a63b-7f037acaa4ef" class=""><mark class="highlight-blue"><strong>Wazuh server cluster installation</strong></mark></blockquote><ol type="1" id="4d009e68-74d6-4a20-9a89-9de50251d9af" class="numbered-list" start="1"><li>Download the Wazuh installation assistant:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="01235053-3dba-4e9b-bab2-ec495fa0c905" class="code"><code class="language-Bash">curl -sO https://packages.wazuh.com/4.3/wazuh-install.sh</code></pre></li></ol><ol type="1" id="83f29f76-5a6a-4031-95df-bd4d97bbb098" class="numbered-list" start="2"><li><strong>Run the assistant with the option</strong> <code>--wazuh-server</code> followed by the node name to install the <strong>Wazuh server</strong>. The node name must be the same one used in <code>config.yml</code> for the initial configuration, for example, <code>wazuh-1</code>.<figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="b18e262a-deba-4f9b-8fa0-7e3e0473a2d7"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">Make sure that a copy of the <code>wazuh-install-files.tar</code>, created during the initial configuration step, is placed in your working directory.</div></figure><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="21536ecc-eaf8-4ab5-8936-3aca2defc65d" class="code"><code class="language-Bash">bash wazuh-install.sh --wazuh-server wazuh-1</code></pre><figure id="939622c2-5eb0-4dad-baba-9b801a5a5338" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2023.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2023.png"/></a></figure><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="7279400c-5f5f-4fc2-a28d-1138cc8f7a92"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">Our system does not comply with recommended considerations, which is why we use the -i option to ignore unnecessary checks.</div></figure><p id="6b6af942-24f1-46ff-8d30-86f0408110a6" class=""><strong>Your Wazuh server is now successfully installed.</strong></p><ul id="a8565053-346f-449d-960a-fde607fbbb19" class="bulleted-list"><li style="list-style-type:disc">If you want a <strong>Wazuh server</strong> <em>single-node cluster</em>, everything is set and you can proceed directly with <em>Installing the Wazuh dashboard using the assistant</em>.</li></ul><ul id="b4904c55-d457-42b3-a12a-88dbab748312" class="bulleted-list"><li style="list-style-type:disc">If you want a <strong>Wazuh server</strong> <em>multi-node cluster</em>, repeat this process on every <strong>Wazuh server </strong>node.</li></ul></li></ol><p id="1c9aaf4a-6841-4722-a541-6bc09342a3a1" class="">The <strong>Wazuh server</strong> installation is now complete, and you can proceed with installing the Wazuh dashboard.</p><hr id="66d415e1-1f4e-4ff1-86f8-03fc1e1976ba"/><blockquote id="b43062fc-f914-469f-9c9e-8c1d184e7e72" class=""><mark class="highlight-red"><strong>Wazuh Dashboard</strong></mark></blockquote><p id="b9c6a476-909d-413d-9638-ee7afffe4c99" class="">The <strong>Wazuh dashboard</strong> is a flexible and intuitive web interface for mining, analyzing, and visualizing security data. It provides out-of-the-box dashboards, allowing seamless navigation through the user interface.</p><p id="75603891-9ab1-4f6f-8b1f-d0ee36b7dfd7" class="">With the <strong>Wazuh dashboard</strong>, users can visualize security events, detected vulnerabilities, file integrity monitoring data, configuration assessment results, cloud infrastructure monitoring events, and regulatory compliance standards.</p><figure id="df088876-5dfe-4a9d-ba34-ab0517491a6c" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2024.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2024.png"/></a></figure><blockquote id="c509c9ec-985b-4967-869e-3b6c7c5c68a1" class=""><mark class="highlight-red"><strong>Wazuh dashboard installation</strong></mark></blockquote><ol type="1" id="03016c4e-5e38-4eed-88ba-151177647652" class="numbered-list" start="1"><li>Download the Wazuh installation assistant. This step can be skipped if you have already installed <strong>Wazuh indexer</strong> on the same server.<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0509eff0-c6d8-4bd7-9ea3-241bb9558289" class="code"><code class="language-Bash">curl -sO https://packages.wazuh.com/4.3/wazuh-install.sh</code></pre></li></ol><ol type="1" id="9cae8016-8628-446f-bc66-65a4d27b95da" class="numbered-list" start="2"><li>Run the assistant with the option <code>--wazuh-dashboard</code> and the node name to install and configure the <strong>Wazuh dashboard</strong>. The node name must be the same one used in <code>config.yml</code> for the initial configuration, for example, <code>dashboard</code>.<figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="4c260fe6-c5bb-4e99-b12c-2ff216920361"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">Make sure that a copy of the <code>wazuh-install-files.tar</code>, created during the initial configuration step, is placed in your working directory.</div></figure><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="48c588cd-eb83-4e01-ac41-fa0dc0547c81" class="code"><code class="language-Bash">bash wazuh-install.sh --wazuh-dashboard dashboard</code></pre><figure id="64d97156-86b9-40ca-98ea-781ed6b0ccda" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2025.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2025.png"/></a></figure><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="4f90d4a3-ee79-460d-a725-572102838f12"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">Our system does not comply with recommended considerations, which is why we use the -i option to ignore unnecessary checks.</div></figure><p id="10c6e930-fccb-4917-a1c5-3ece6caa61e1" class="">Once the assistant finishes the installation, the output shows the access credentials and a message that confirms that the installation was successful.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7c8a67ab-d638-4a89-9697-ea9a561f00aa" class="code"><code class="language-Bash">INFO: --- Summary ---
+INFO: You can access the web interface https://&lt;wazuh-dashboard-ip&gt;
+   User: admin
+   Password: &lt;ADMIN_PASSWORD&gt;
+
+INFO: Installation finished.</code></pre><p id="29c92731-73dc-47be-81d0-931d4a766678" class="">You now have installed and configured <strong>Wazuh</strong>. All passwords generated by the <strong>Wazuh</strong> installation assistant can be found in the <code>wazuh-passwords.txt</code> file inside the <code>wazuh-install-files.tar</code> archive. To print them, run the following command:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="83d4114b-e9d4-41cf-928f-104f761773b9" class="code"><code class="language-Bash">tar -O -xvf wazuh-install-files.tar wazuh-install-files/wazuh-passwords.txt</code></pre><figure id="505c22ba-f6cb-4232-9cee-2d6af1a5da6d" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2026.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2026.png"/></a></figure></li></ol><ol type="1" id="b102a969-5c8c-4855-bb9f-36b67fae599b" class="numbered-list" start="3"><li>Access the <strong>Wazuh</strong> web interface with your credentials.<ol type="a" id="9928e4e5-865a-42a2-bbf2-4a7e5ab6ae87" class="numbered-list" start="1"><li><strong>URL</strong>: <em>https://&lt;wazuh-dashboard-ip&gt;</em></li></ol><ol type="a" id="cd10a48f-eaea-4007-b27b-64b30eb16d6c" class="numbered-list" start="2"><li><strong>Username</strong>: <em>admin</em></li></ol><ol type="a" id="47042265-e449-4e9e-86a6-bfdeba71ba6d" class="numbered-list" start="3"><li><strong>Password</strong>: <em>&lt;ADMIN_PASSWORD&gt;</em></li></ol><figure id="d2128116-5815-4e1c-9946-b4ddc324d308" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2027.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2027.png"/></a></figure><figure id="b1bcc5cb-65d5-480c-825e-eb3c179cf498" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2028.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2028.png"/></a></figure><figure id="5a2660f1-a741-4e45-8bf6-0c8bfa5c4b16" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2029.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2029.png"/></a></figure><figure id="fd53ce00-d71b-4865-972a-c0c128b18734" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2030.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2030.png"/></a></figure><p id="8f15b024-9411-45ed-bfe0-54f460f5f9a4" class="">When you access the <strong>Wazuh dashboard</strong> for the first time, the browser shows a warning message stating that the certificate was not issued by a trusted authority. An exception can be added in the advanced options of the web browser. For increased security, the <code>root-ca.pem</code> file previously generated can be imported to the certificate manager of the browser instead. Alternatively, a certificate from a trusted authority can be configured.</p><hr id="927ebf87-9c27-4d8c-adb6-7dfd44cb2284"/></li></ol><h3 id="aa14c865-2be9-4bc6-aa41-7a76898521fe" class="">1.4.3 Wazuh Cloud</h3><p id="5d85ac16-50a8-4b4a-b27b-3820708f40ae" class=""><strong>Wazuh Cloud</strong> is a <em>cloud-based</em> security monitoring solution that provides organizations with a comprehensive approach to <em>security information</em> and <em>event management</em> (<strong>SIEM</strong>) and extended detection and response (<strong>XDR</strong>). Below are the key details about <strong>Wazuh Cloud</strong>:</p><figure id="23ae893d-a861-4a94-8cdc-94a8084ed0f0" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2031.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2031.png"/></a></figure><p id="d059aba1-8a56-4a3b-bbeb-cdfc3e460842" class=""><strong>Wazuh Cloud</strong> enables organizations to monitor their <strong>IT infrastructure</strong>, including <em>on-premises</em>, <em>cloud</em>, and <em>hybrid</em> environments, by leveraging the capabilities of the <strong>Wazuh</strong> platform. It provides a centralized view of security events and incidents, allowing for real-time analysis and response.</p><p id="ce902b21-b0e9-4529-89aa-04afedd2a90b" class=""><strong>Key Features</strong></p><ol type="1" id="70251b2a-cbee-41e3-b1c1-fc379d765852" class="numbered-list" start="1"><li><strong>Centralized Management</strong>:<ul id="fe510b92-0083-4624-aa08-64c8a1ef2fbc" class="bulleted-list"><li style="list-style-type:disc"><strong>Wazuh Cloud</strong> allows for the centralized management of security events from multiple sources, including servers, workstations, and cloud services.</li></ul></li></ol><ol type="1" id="f444402c-e8e7-4041-8311-c27403240a74" class="numbered-list" start="2"><li><strong>Real-time Monitoring</strong>:<ul id="e6dcb1f1-0cb0-48a6-8be9-e00ccf36d13b" class="bulleted-list"><li style="list-style-type:disc">The platform provides real-time monitoring of security events, enabling organizations to detect threats and anomalies as they occur.</li></ul></li></ol><ol type="1" id="3e5f64bc-93fc-41c3-9331-d554d2773aeb" class="numbered-list" start="3"><li><strong>Scalability</strong>:<ul id="4a54be56-2971-4bc3-9bee-9d56a2b7770e" class="bulleted-list"><li style="list-style-type:disc">Wazuh Cloud is designed to scale with the organization&#x27;s needs, allowing for the addition of new agents and resources without significant overhead.</li></ul></li></ol><ol type="1" id="5891514c-b9c5-41c0-b1a0-d5ced11e2d18" class="numbered-list" start="4"><li><strong>Compliance Management</strong>:<ul id="1c2bdc90-7efc-4d62-b406-90e434e2aa12" class="bulleted-list"><li style="list-style-type:disc">Wazuh Cloud helps organizations meet compliance requirements by providing tools for auditing and reporting on security events.</li></ul></li></ol><ol type="1" id="005bd7a9-849e-452a-a692-285555b1adad" class="numbered-list" start="5"><li><strong>Integration with Cloud Providers</strong>:<ul id="a1ab3f8c-b036-4a66-8f51-9f59e0914a2f" class="bulleted-list"><li style="list-style-type:disc">The solution supports integrations with major cloud service providers, allowing for seamless monitoring of cloud resources.</li></ul></li></ol><ol type="1" id="efdc3521-1e9e-45b5-966b-63dc0f5daf46" class="numbered-list" start="6"><li><strong>Threat Intelligence</strong>:<ul id="1eb9a4f9-320e-4edc-bd08-b63ad4308d4d" class="bulleted-list"><li style="list-style-type:disc">Wazuh Cloud incorporates threat intelligence feeds to enhance the detection capabilities and provide context around security events.</li></ul></li></ol><figure id="830ed09b-bb32-4b7f-a337-95b1d26cd041" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2032.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2032.png"/></a></figure><p id="9ab93c2d-7de6-44a4-8ed7-68d07b5fc9e7" class=""><strong>Trial Offer</strong></p><p id="04fa26fd-5478-4752-9744-aff2a7b10830" class="">The trial lasts for <strong>14 days</strong>, allowing organizations to explore the features and capabilities of <strong>Wazuh Cloud</strong> without any commitment.</p><figure id="c6d67606-c205-4a42-8621-0a12f8518f3a" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2033.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2033.png"/></a></figure><p id="c5a68e19-02cb-4b14-95c4-3e4b14c4c68e" class="">During the <em>trial</em>, users can access all the functionalities of <strong>Wazuh Cloud</strong>, including <em>agent management</em>, <em>alerting</em>, <em>reporting</em>, and compliance features.</p><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="45c3d0da-ddea-4b03-b27d-d3c5815e03c5"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">The trial version is offered free of charge and without the use of a <strong>credit card</strong>, making it a great opportunity for organizations to evaluate the solution.<br/>After the trial period, organizations can choose from several pricing plans based on their requirements:<br/></div></figure><figure id="f4556377-ff3b-481f-9dd0-8deb158b6255" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2034.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2034.png"/></a></figure><p id="873bcb9b-af1c-42ed-8c2e-1e025aa3c057" class=""><strong>Wazuh Cloud</strong> is a valuable tool for organizations looking to enhance their security posture. For more information or to sign up for the trial, you can visit the official <strong>Wazuh</strong> website.</p><hr id="8ff34727-a423-4759-934c-525b2517ce7c"/><h1 id="29614bc7-6532-43df-a256-5cb1d090feed" class="">2. Configuring Wazuh SIEM</h1><h2 id="413c3930-f1eb-4cc0-8360-7ae43b8f1d53" class="">2.1 Configuring Wazuh to Monitor Docker Containers</h2><p id="fbb8d5fd-c719-4416-aeb4-e757c1db5a49" class="">To effectively monitor <strong>Docker containers</strong> using <strong>Wazuh</strong>, you need to configure both the <strong>Wazuh Manager</strong> and the <strong>Wazuh Agent</strong>. This section provides a step-by-step guide on how to set up <strong>Wazuh</strong> to collect logs from <strong>Docker containers</strong>, including installing and configuring the <strong>Wazuh Agent</strong>.</p><h3 id="d1948792-3165-412e-9963-3b7b6139bc20" class="">2.1.1 Installing Wazuh Agent on Docker Host</h3><p id="49c3ddd0-2129-4ce4-86c7-88378d08878d" class="">You can install the <strong>Wazuh agent</strong> on the <strong>Docker host</strong> (<em>the machine where your Docker containers are running</em>) in two primary ways: <strong>manually</strong> or through the <strong>Wazuh UI</strong>. Below, I’ll outline both methods for installing the Wazuh agent.</p><ol type="1" id="d043783b-d9bb-4359-be22-fe5977619528" class="numbered-list" start="1"><li><strong>Add Wazuh Repository and Install Agent:</strong><ol type="a" id="44961f53-34f4-46d1-b884-c118271bd17e" class="numbered-list" start="1"><li>First, add the <strong>Wazuh</strong> repository and install the Wazuh Agent on the host where Docker is running.<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="77e097a7-00fa-41a2-9e41-c802bdaac0a1" class="code"><code class="language-Bash">curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | gpg --no-default-keyring --keyring gnupg-ring:/usr/share/keyrings/wazuh.gpg --import &amp;&amp; chmod 644 /usr/share/keyrings/wazuh.gpg
+echo &quot;deb [signed-by=/usr/share/keyrings/wazuh.gpg] https://packages.wazuh.com/4.x/apt/ stable main&quot; | tee -a /etc/apt/sources.list.d/wazuh.list
+apt-get update</code></pre><figure id="00053b9c-2c77-418c-ac80-af133dd559f4" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2035.png"><img style="width:652px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2035.png"/></a></figure><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="02bcabf1-fbff-4a80-9d59-8f9e85a9c706"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">For Debian 7, 8, and Ubuntu 14 systems import the GCP key and add the Wazuh repository (steps 1 and 2) using the following commands.<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c96014d6-5535-4e4e-a214-ea9444f43639" class="code"><code class="language-Bash">apt-get install gnupg apt-transport-https
+curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | apt-key add -
+echo &quot;deb https://packages.wazuh.com/4.x/apt/ stable main&quot; | tee -a /etc/apt/sources.list.d/wazuh.list</code></pre></div></figure></li></ol></li></ol><ol type="1" id="a9943d77-d319-4b8c-b768-25f82725ea38" class="numbered-list" start="2"><li><strong>Deploy a Wazuh agent</strong><ol type="a" id="01c4f0dc-ecb1-482a-956d-8c3ae5e7f277" class="numbered-list" start="1"><li>To deploy the <strong>Wazuh agent</strong> on your endpoint, select your package manager and edit the <code>WAZUH_MANAGER</code> variable to contain your <strong>Wazuh manager IP</strong> address or hostname.<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b87c4769-3a1d-422e-b7ec-9add8af4b7d3" class="code"><code class="language-Bash">WAZUH_MANAGER=&quot;IP_ADDRESS&quot; apt-get install wazuh-agent</code></pre><figure id="47b1e450-6ff1-4d04-89bd-f920c7ce19ed" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2036.png"><img style="width:652px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2036.png"/></a></figure><figure id="f0ab29d9-13b6-4e49-8bc4-b45d8ebb5da4" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2037.png"><img style="width:652px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2037.png"/></a></figure></li></ol></li></ol><ol type="1" id="e8a8d4a7-ac88-4110-a3b8-bfcf5eaa3f7f" class="numbered-list" start="3"><li><strong>Enable and start the Wazuh agent service</strong><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a9497f82-a6e5-4b3f-bf22-72d9bf05d358" class="code"><code class="language-Bash">systemctl daemon-reload
+systemctl enable wazuh-agent
+systemctl start wazuh-agent</code></pre><figure id="c8f85953-f68b-4261-9414-d54183e0d2c5" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2038.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2038.png"/></a></figure><figure id="5f92043b-cdd0-4a15-bdf9-39ab07403b87" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2039.png"><img style="width:684px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2039.png"/></a></figure></li></ol><p id="2abba72e-2e48-4dbd-9de6-5ce4207202f6" class="">The deployment process is now complete, and the <strong>Wazuh agent</strong> is successfully running on your <strong>Linux system</strong>.</p><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="5a1157f9-38f8-4ab5-98b8-37b6cc1f2026"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">The previous steps were for <strong>manual</strong> <strong>Wazuh Agent</strong> installation, but if you want to make it faster and easier, use the<strong> Wazuh UI</strong> to add agents.</div></figure><p id="beefb651-19b5-42cb-ad5b-ea0fe1a41734" class=""><strong>Follow these steps to enroll an agent:</strong></p><ol type="1" id="4ad294b4-c40d-41d1-b38a-607bb8f08c7b" class="numbered-list" start="1"><li>Log into the <strong>Wazuh WUI</strong>.<figure id="31e3475a-5f2a-44f6-af71-ddfe4724d5e3" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2040.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2040.png"/></a></figure></li></ol><ol type="1" id="36d32dcc-a63c-4193-8b2d-28b4f898d672" class="numbered-list" start="2"><li>Click the upper-left <strong>Wazuh</strong> icon and then <strong>Agents</strong>.<figure id="19e09069-071a-4944-b1a6-8f12c07e7619" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2041.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2041.png"/></a></figure><figure id="48b5dfe0-1bf0-423d-96a8-927bd56a4bf8" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2042.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2042.png"/></a></figure><figure id="b873cee9-7ab6-4e7c-b524-e9e34169046a" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2043.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2043.png"/></a></figure></li></ol><ol type="1" id="d9b68951-c13a-4998-8b91-af33d1a74b8b" class="numbered-list" start="3"><li>Click <strong>Deploy new agent</strong>.</li></ol><ol type="1" id="aae4ca21-6f58-4ec3-810b-6a0c75472557" class="numbered-list" start="4"><li>Follow the steps described on the <strong>Deploy a new agent</strong> page.<figure id="46f5ffeb-17be-4a16-a151-b3567be76039" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2044.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2044.png"/></a></figure><figure id="51192c83-18af-47c1-986c-9a0c95b3101d" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2045.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2045.png"/></a></figure></li></ol><h3 id="4ee70d82-5ca4-43f8-96d6-58bf3888508c" class="">2.1.2 Monitoring Docker events</h3><p id="34879dbb-10e9-4b97-931a-bd8137fa6f3d" class=""><strong>Docker</strong> automates the deployment of different applications inside software containers. The <strong>Wazuh module</strong> for<strong> Docker</strong> identifies security incidents across containers and alerts in real-time. In this use case, you configure <strong>Wazuh</strong> to monitor <strong>Docker events</strong> on an <strong>Ubuntu</strong> endpoint hosting Docker containers.<br/>Before you start monitoring <br/><strong>Docker</strong> containers with <strong>Wazuh</strong>, it&#x27;s essential to enable the <strong>Docker Listener</strong> module in the <strong>Wazuh UI</strong>. This module allows the <strong>Wazuh</strong> agent to capture <strong>Docker</strong> events and forward them to the <strong>Wazuh</strong> server for analysis.</p><figure id="700274c1-abf9-4a95-b83e-0ad927d85329" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2046.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2046.png"/></a></figure><figure id="7939f5e0-5f4e-42cc-bb8d-beb89d98c5d1" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2047.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2047.png"/></a></figure><figure id="bcc36bfe-5137-48f5-868d-621456ac82be" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2048.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2048.png"/></a></figure><p id="7d7370f9-4886-458d-b615-051786630360" class="">Perform the following steps to install <strong>Docker</strong> on the <strong>Ubuntu</strong> endpoint and configure <strong>Wazuh</strong> to monitor <strong>Docker</strong> events.</p><ol type="1" id="6088b3a4-e111-4b56-9630-d4c1dd639ce6" class="numbered-list" start="1"><li><strong>Install Python and pip</strong>:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e107e8dd-67d8-4cc3-bd0c-adbc88b8b6f1" class="code"><code class="language-Bash" style="white-space:pre-wrap;word-break:break-all">sudo apt install python3 python3-pip</code></pre><figure id="a8602e08-52e8-4691-a6a7-02f420ef1e53" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2049.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2049.png"/></a></figure></li></ol><ol type="1" id="7020d0bb-2c00-4b85-9f0e-f250bc235c1b" class="numbered-list" start="2"><li><strong>Upgrade pip</strong>:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="46ad2235-56ea-4a7b-9024-0577f0b538d0" class="code"><code class="language-Bash" style="white-space:pre-wrap;word-break:break-all">pip3 install --upgrade pip</code></pre><figure id="9518fe41-c6e0-46b2-95c1-f761b728e481" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2050.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2050.png"/></a></figure></li></ol><ol type="1" id="da601455-00aa-4d65-8b77-c7e75971f37e" class="numbered-list" start="3"><li><strong>Install Docker and Python Docker Library</strong>:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="bbf5674e-ff91-43c6-a61e-e5fc83f790cc" class="code"><code class="language-Bash">curl -sSL https://get.docker.com/ | sh
+sudo pip3 install docker==7.1.0 urllib3==2.2.2 requests==2.32.2</code></pre><figure id="0f586a13-be29-4dfe-901b-3d88ff8c49bc" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2051.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2051.png"/></a></figure><figure id="7c5d2e62-f7b0-448f-b8d4-b7fce350d7a2" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2052.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2052.png"/></a></figure></li></ol><ol type="1" id="ab36f6d0-c7f2-497d-9fb9-59be43751209" class="numbered-list" start="4"><li>Edit the <strong>Wazuh agent</strong> configuration file <code>/var/ossec/etc/ossec.conf</code> and add this block to enable the <code>docker-listener</code> module:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="61dada3c-d1d3-408d-a317-ec89541ad999" class="code"><code class="language-Bash">&lt;ossec_config&gt;
+  &lt;wodle name=&quot;docker-listener&quot;&gt;
+    &lt;interval&gt;5m&lt;/interval&gt;
+    &lt;attempts&gt;5&lt;/attempts&gt;
+    &lt;run_on_start&gt;yes&lt;/run_on_start&gt;
+    &lt;disabled&gt;no&lt;/disabled&gt;
+  &lt;/wodle&gt;
+&lt;/ossec_config&gt;</code></pre><figure id="c50b6a37-8625-4a69-a91c-78ce81d9f7ce" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2053.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2053.png"/></a></figure></li></ol><ol type="1" id="b022e1e4-1e9f-4a9e-ae76-0873efaa2f6f" class="numbered-list" start="5"><li>Restart the <strong>Wazuh agent</strong> to apply the changes:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e2b01ee4-a325-459c-a6bf-b36a797a9f91" class="code"><code class="language-Bash">sudo systemctl restart wazuh-agent</code></pre><figure id="3ae8a8de-9855-4a62-b3a0-23cc7a20165c" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2054.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2054.png"/></a></figure></li></ol><p id="e81880f2-c2c4-4085-92cc-97df88df0e0e" class="">Perform several <strong>Docker </strong>activities like <em>pulling</em> a <strong>Docker image</strong>, <em>starting an instance</em>, <em>running</em> some other <strong>Docker</strong> commands, and then<em> deleting</em> the container.</p><ol type="1" id="3c21b965-313e-4137-9fef-0ab0e1c58e7d" class="numbered-list" start="1"><li>Pull an image, such as the <strong>NGINX</strong> image, and run a container:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b34a67a2-7a2a-40c6-91f9-bdd4da931e1c" class="code"><code class="language-Bash">sudo docker pull nginx
+sudo docker run -d -P --name nginx_container nginx
+sudo docker exec -it nginx_container cat /etc/passwd
+sudo docker exec -it nginx_container /bin/bash
+exit</code></pre><figure id="ebde08cf-981e-40ba-8cb7-d14bc40bdbf6" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2055.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2055.png"/></a></figure><figure id="5d4d9d83-fe71-4b43-b7bf-c0a2b0715a9a" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2056.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2056.png"/></a></figure><figure id="afd47775-ff11-487b-bee0-38d524a7b6e6" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2057.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2057.png"/></a></figure><figure id="3cc5be12-221f-4b03-b7f5-90d9a660e518" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2058.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2058.png"/></a></figure><figure id="8bd58779-faae-4e96-8464-fb4cbc394fd0" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2059.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2059.png"/></a></figure></li></ol><hr id="3a297a53-3cee-420e-ae3d-645e725f72da"/><p id="257fe036-89a7-4236-b0d5-f0345c01d1f5" class="">To detect vulnerabilities in <strong>Docker containers</strong> using <strong>Wazuh</strong>, you first need to configure <strong>Wazuh</strong> to monitor the logs generated by your <strong>Docker containers</strong>.</p><h3 id="996b33d6-cfc6-4539-b17e-437f0f434fac" class="">2.1.3 <strong>Monitoring Docker container logs</strong></h3><p id="21140012-2101-475a-9f67-d743e8706dc5" class="">By default, <strong>Docker container</strong> logs only show <code>stdout</code> and <code>stderr</code> standard streams, which are cleared when the container is destroyed. However, when <strong>non-interactive</strong> processes, like a <em>database</em> or <em>web server</em> are run, logs pertaining to these processes are generated. These logs can be collected using <strong>Docker logging drivers</strong> and saved to a file. If the design of a container is good enough, it can provide valuable logs to be examined.</p><p id="98e5bb8d-3e3d-4136-a0ad-7d3e9514429c" class="">By default, when a container is created by the docker engine, the <strong>JSON</strong> <strong>File logging</strong> driver is used. Logs captured this way can be found in <code>/var/lib/docker/containers/[container-id]/[container-id]-json.log</code>. The <strong>Wazuh agent</strong> can collect logs directly from this location but the <br/>logs do not provide enough information about which container produced it. This might be a problem when we have a large number of containers. <br/><strong>Rsyslog</strong> is used to improve the container logs by tagging them with their respective container names and grouping them in a directory. The <strong>JSON File logging</strong> driver doesn’t allow the log file location to be changed, so we will use the <strong>Syslog logging driver</strong> instead.</p><p id="67a4d7cb-af90-481c-9bb6-9e1e74603cb2" class="">When creating a container, the <code>--log-driver</code> tag can be specified to set the log driver which will be used. A more global approach is to use a configuration that sets the logging driver for all containers created.</p><p id="3be8337d-b590-45b5-af76-9db2adcb6520" class="">To set the global logging driver, create or edit <code>/etc/docker/daemon.json</code>. This way all containers created henceforth will use the <strong>Syslog</strong> driver:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d5445eb0-9e6f-483a-b282-c215bf34c374" class="code"><code class="language-JSON">{
+  &quot;log-driver&quot;: &quot;syslog&quot;,
+  &quot;log-opts&quot;: {
+    &quot;syslog-address&quot;: &quot;unixgram:///dev/log&quot;,
+    &quot;tag&quot;: &quot;docker/{{.Name}}&quot;
+  }
+}</code></pre><figure id="ee789e4a-bd40-4559-abec-ea2bf078f827" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2060.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2060.png"/></a></figure><p id="ca0520f1-43c6-4322-9717-53e182a90403" class="">The configuration above specifies:</p><ul id="68f2a9cf-d0c4-47f5-8b79-74530660957c" class="bulleted-list"><li style="list-style-type:disc">The type of log driver used, which in this case is <strong>Syslog</strong>.</li></ul><ul id="d2d6a290-c5a7-4585-8491-871304283a5c" class="bulleted-list"><li style="list-style-type:disc">That log messages will be channeled to <code>unixgram:///dev/log</code>, then the <strong>Rsyslog</strong> daemon pulls data from that socket.</li></ul><ul id="e9f0fded-4095-49fb-9d4b-14c832a67f14" class="bulleted-list"><li style="list-style-type:disc">That log messages will be tagged with <code>docker/{{.Name}}</code>, where <code>{{.Name}}</code> replaces the container name.</li></ul><p id="3ac35c93-dd3f-49f3-be5f-49972d17574c" class=""><strong>Restart the Docker service to apply changes:</strong></p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ed135a65-e70e-4f1b-881b-1c4cc86d1da3" class="code"><code class="language-Bash">systemctl restart docker</code></pre><figure id="e4b477e0-7245-4b0a-9956-a3e5562fbc26" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2061.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2061.png"/></a></figure><p id="1f87c6b5-54c0-473e-81b9-25c0f6106d63" class="">We need to configure <strong>Rsyslog</strong> to create and tag new logs from containers in the <code>/var/log/docker</code> folder.</p><p id="f2d4b641-0a78-4528-9097-175a73a54e1c" class="">Let’s create a configuration file called <code>wazuh-docker.conf</code> in the <code>/etc/rsyslog.d/</code> directory:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1066e2f6-2ae4-4ca6-baa8-b4c99286cedc" class="code"><code class="language-Bash">$FileCreateMode 0644
+$template DockerDaemonLogFileName,&quot;/var/log/docker/docker.log&quot;
+$template DockerContainerLogFileName,&quot;/var/log/docker/%SYSLOGTAG:R,ERE,1,FIELD:docker/(.*)\[--end:secpath-replace%.log&quot;
+if $programname == &#x27;dockerd&#x27; then {
+  ?DockerDaemonLogFileName
+  stop
+}
+if $programname == &#x27;containerd&#x27; then {
+  ?DockerDaemonLogFileName
+  stop
+}
+if $programname == &#x27;docker&#x27; then {
+  if $syslogtag contains &#x27;docker/&#x27; then {
+  ?DockerContainerLogFileName
+  stop
+  }
+}
+$FileCreateMode 0600</code></pre><figure id="8fb3753f-0fab-4032-9b25-d658ea5d1911" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2062.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2062.png"/></a></figure><p id="731f91a0-8ff5-41de-a8c2-7ed2af1bb9fb" class="">The configuration above specifies:</p><ul id="01659324-fd08-45ee-9705-e45141f18149" class="bulleted-list"><li style="list-style-type:disc">The files created are in <code>0644</code> mode, meaning they will be readable by all the user groups, but writable by the user only.</li></ul><ul id="85b22a27-57c1-4d45-85e4-17f5236059cc" class="bulleted-list"><li style="list-style-type:disc">That any log from <strong>dockerd</strong>, <strong>containerd</strong>, and docker runtime will be written to <code>/var/log/docker/docker.log</code>.</li></ul><ul id="f1035821-3981-4115-9202-a7411e6ec41b" class="bulleted-list"><li style="list-style-type:disc"><code>SYSLOGTAG:R,ERE,1,FIELD:docker/(.*)\[--end:secpath-replace%</code> is equivalent to the <code>{{.Name}}</code> tag in the <strong>Docker</strong> daemon configuration. Therefore new logs will be located in <code>/var/log/docker/[new container name].log</code>.</li></ul><p id="ed0dd18d-34cf-4ab0-9841-b8ce94fb9fc5" class=""><strong>Restart the Rsyslog service to apply changes:</strong></p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c75b67b6-4c87-4739-9ee4-1cf555023465" class="code"><code class="language-Bash">systemctl restart rsyslog</code></pre><figure id="71367a44-aab0-4b56-9a84-1681cad59191" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2063.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2063.png"/></a></figure><p id="2d0f829a-9ef5-4e6e-9062-6c343ff9bb3f" class="">New logs should start appearing in the <code>/var/log/docker</code> directory when containers are created.</p><figure id="936ecadb-ccaa-418f-8f23-0b3882c75ecb" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2064.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2064.png"/></a></figure><p id="c743ec1a-6522-4860-936b-41ef3b3bfe35" class="">To configure log collection locally on the agent, add the configuration below inside the <code>&lt;ossec_config&gt;</code> tag of the <code>/var/ossec/etc/ossec.conf</code> file. A wild card is used, this way the <strong>Wazuh agent</strong> will read every container log in that directory:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="cb33b3ec-8abb-4461-b188-04b2f60c3601" class="code"><code class="language-Bash">&lt;localfile&gt;
+  &lt;log_format&gt;syslog&lt;/log_format&gt;
+  &lt;location&gt;/var/log/docker/*&lt;/location&gt;
+&lt;/localfile&gt;</code></pre><figure id="8b0b63cc-478b-4e94-83c2-178ce1499cc2" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2065.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2065.png"/></a></figure><p id="10a528f9-1a16-47c3-8168-65a45a20ae60" class=""><strong>Restart the Wazuh agent for changes to apply:</strong></p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0e287dd3-01f8-4478-b62b-d09125c064bc" class="code"><code class="language-Bash">systemctl restart wazuh-agent</code></pre><figure id="c5a67d7e-d550-4f48-a848-d1a9f033310a" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2066.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2066.png"/></a></figure><p id="9dbfdc1c-330d-459d-9af8-d25ba94abacf" class="">As mentioned earlier, non-interactive applications produce additional logs, depending on the design of the container. For example, a web server container will generate web logs. So we expect to see <strong>HTTP</strong> web requests like <code>GET</code> in the logs.</p><p id="ccb561f6-b1c1-43e3-a4ac-95f0f0fc8a2b" class="">Let’s set up a simple web server that shows its <em>hostname</em>, <em>IP address</em>, and other information:</p><ul id="1a240d2b-17f9-47f7-b296-c7740f4900cb" class="bulleted-list"><li style="list-style-type:disc">Create a container using the <code>nginxdemos/hello</code> container image. Setting the container name is important for <strong>Rsyslog</strong> to tag the log:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b70a4598-212a-4452-96d2-69727d47af4d" class="code"><code class="language-Bash">docker run -P -d --hostname webserver --name webserver nginxdemos/hello</code></pre><figure id="45d86e55-7e66-4e68-8b60-724edc2242d2" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2067.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2067.png"/></a></figure></li></ul><ul id="00d541e9-10c9-43ac-b756-aa30927d682e" class="bulleted-list"><li style="list-style-type:disc">Check that there is a new log file:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="8cd2a350-7193-4d29-b54a-0c5ec62c89eb" class="code"><code class="language-Bash">ls /var/log/docker/webserver.log</code></pre><figure id="390a8568-48fc-4a54-9ef4-61173c54e2d0" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2068.png"><img style="width:680px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2068.png"/></a></figure></li></ul><p id="8059b912-044c-4a03-b5b8-4a5e6b32ef40" class="">Configure the manager to store events collected by the agent to <code>/var/ossec/logs/archives/archives.json</code> file. These logs will be used to create rules and decoders. In the <code>/var/ossec/etc/ossec.conf</code> file, change <code>&lt;logall_json&gt;</code> to <code><strong>yes</strong></code>. Later <strong>when rules are being triggered</strong>, we change <code>&lt;logall_json&gt;</code> back to <code><strong>no</strong></code>. This way large volumes of logs are not stored on the manager side:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="85aec5c1-c315-49a2-926d-0173b32d9624" class="code"><code class="language-Bash">&lt;logall_json&gt;yes&lt;/logall_json&gt;</code></pre><figure id="e2186718-cea1-4d23-969e-7f28cd943931" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2069.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2069.png"/></a></figure><p id="d94ad173-4f97-4fbe-8c27-0b89cd8e023e" class=""><strong>Restart the Wazuh manager for changes to apply:</strong></p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e243bbd7-85f3-4342-800c-493d6a138f94" class="code"><code class="language-Bash">systemctl restart wazuh-manager</code></pre><figure id="147a9522-74a5-47d1-932f-5a3e42e925e6" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2070.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2070.png"/></a></figure><p id="a6e3475b-7b75-47fa-bf6a-079027ad3617" class="">On the <strong>Linux/Unix</strong> endpoint, get the <strong>IP</strong> address of the <strong>web server</strong> container:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c34500c6-1426-4e62-b464-13cf69613155" class="code"><code class="language-Bash">docker inspect webserver | grep IPAddress</code></pre><figure id="30ecea64-e3f2-4c2c-8b37-5c85b8167d7a" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2071.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2071.png"/></a></figure><p id="f79d21a2-d738-4591-b543-967f91a68e36" class="">On the <strong>Wazuh manager</strong>, check that it can see the container logs after a curl request is made:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="565bb19c-b581-4904-9eff-2c2382c19e9d" class="code"><code class="language-Bash">tail -f /var/ossec/logs/archives/archives.json | grep webserver</code></pre><figure id="86d7626f-b994-4b22-955e-95f565b17616" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2072.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2072.png"/></a></figure><p id="6beb9a28-b8a1-4d57-973c-e1286380e276" class="">From a machine that can reach the web server, do a curl request or browse to the <strong>web server </strong>container <strong>IP</strong> address:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="80e3d69c-75f2-4b65-ba81-059c646aa7e4" class="code"><code class="language-Bash">curl &lt;webserver_IP&gt;</code></pre><figure id="56b53dcb-5907-4b3e-bea1-fe6383cf7bd8" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2073.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2073.png"/></a></figure><p id="2d687278-fe9d-4d40-9355-a19c769ac676" class="">The curl request creates an event that is logged to the Wazuh manager archives:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="102c955a-164e-4329-b3a6-4c9a345079ce" class="code"><code class="language-Bash">{&quot;timestamp&quot;:&quot;2022-02-02T11:53:33.058+0000&quot;,&quot;agent&quot;:{&quot;id&quot;:&quot;025&quot;,&quot;name&quot;:&quot;vagrant&quot;,&quot;ip&quot;:&quot;10.0.2.15&quot;},&quot;manager&quot;:{&quot;name&quot;:&quot;wazuh-manager&quot;},&quot;id&quot;:&quot;1643802813.1121072&quot;,&quot;full_log&quot;:&quot;Feb  2 11:53:32 vagrant docker/webserver[24403]: 172.17.0.1 - - [02/Feb/2022:11:53:32 +0000] \&quot;GET / HTTP/1.1\&quot; 200 7228 \&quot;-\&quot; \&quot;curl/7.58.0\&quot; \&quot;-\&quot;&quot;,&quot;predecoder&quot;:{&quot;program_name&quot;:&quot;docker/webserver&quot;,&quot;timestamp&quot;:&quot;Feb  2 11:53:32&quot;,&quot;hostname&quot;:&quot;vagrant&quot;},&quot;decoder&quot;:{&quot;name&quot;:&quot;docker_log_decoder&quot;},&quot;data&quot;:{&quot;srcip&quot;:&quot;172.17.0.1&quot;,&quot;date&quot;:&quot;02/Feb/2022&quot;,&quot;time&quot;:&quot;2022:11:53&quot;,&quot;web_action&quot;:&quot;\&quot;GET / HTTP/1.1\&quot; 200&quot;},&quot;location&quot;:&quot;/var/log/syslog&quot;}</code></pre><figure id="c2049707-824b-4218-8b9b-939284d5accf" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2074.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2074.png"/></a></figure><p id="cc539218-08f6-4766-ad92-dfd654f31524" class="">The container logs are in the <code>full_log</code> field in the log above. This is the log of interest:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="bf633542-d70c-4796-8357-cc6f58b6cbdb" class="code"><code class="language-Bash">Feb  2 11:53:32 vagrant docker/webserver[24403]: 172.17.0.1 - - [02/Feb/2022:11:53:32 +0000] &quot;GET / HTTP/1.1&quot; 200 7228 &quot;-&quot; &quot;curl/7.58.0&quot; &quot;-&quot;&#x27;</code></pre><figure id="8b2c680f-f5e8-4e80-9e31-74c46e414d18" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2075.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2075.png"/></a></figure><p id="cf89a7be-9adb-404b-b226-9a1960b6e7bd" class="">Write decoders to extract information from the <code>full_log</code> field. To do it, edit <code>/var/ossec/etc/decoders/local_decoder.xml</code> on the <strong>Wazuh manager</strong>:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="947f6483-8db1-4c58-b77e-11dab2ba1b5a" class="code"><code class="language-Bash">&lt;decoder name=&quot;docker_log_decoder&quot;&gt;
+  &lt;program_name&gt;^docker&lt;/program_name&gt;
+&lt;/decoder&gt;
+
+&lt;decoder name=&quot;docker_log_decoder_2&quot;&gt;
+  &lt;parent&gt;docker_log_decoder&lt;/parent&gt;
+  &lt;regex offset=&quot;after_parent&quot;&gt;(\d*.\d*.\d*.\d*)&lt;/regex&gt;
+  &lt;order&gt;srcip&lt;/order&gt;
+&lt;/decoder&gt;
+
+&lt;decoder name=&quot;docker_log_decoder_2&quot;&gt;
+  &lt;parent&gt;docker_log_decoder&lt;/parent&gt;
+  &lt;regex offset=&quot;after_parent&quot;&gt;(\d*/\w*/\d*)&lt;/regex&gt;
+  &lt;order&gt;date&lt;/order&gt;
+&lt;/decoder&gt;
+
+&lt;decoder name=&quot;docker_log_decoder_2&quot;&gt;
+  &lt;parent&gt;docker_log_decoder&lt;/parent&gt;
+  &lt;regex offset=&quot;after_parent&quot;&gt;(\d*:\d*:\d*)&lt;/regex&gt;
+  &lt;order&gt;time&lt;/order&gt;
+&lt;/decoder&gt;
+
+&lt;decoder name=&quot;docker_log_decoder_2&quot;&gt;
+  &lt;parent&gt;docker_log_decoder&lt;/parent&gt;
+  &lt;regex offset=&quot;after_parent&quot;&gt;(&quot;\w*\s/\s\w*/\d.\d&quot;\s\d*)&lt;/regex&gt;
+  &lt;order&gt;web_action&lt;/order&gt;
+&lt;/decoder&gt;</code></pre><figure id="8d783562-2c91-433e-a38d-9794b451ac0c" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2076.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2076.png"/></a></figure><p id="6c1f176a-c4fd-495a-8ea4-5199f871b9d9" class="">We run the log test binary to check that the decoder is extracting the event fields:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="78c936da-21bb-4e27-9153-7cb3988fd962" class="code"><code class="language-Bash">/var/ossec/bin/wazuh-logtest</code></pre><p id="84bc4629-23ee-456b-8188-6c1bfe23f218" class="">Paste the log after the binary starts:</p><figure id="bfafd96c-af36-4182-8f49-a4ade5f4e979" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2077.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2077.png"/></a></figure><p id="166dc892-5407-4884-9dea-6c21353b347b" class="">To write a custom rule that triggers an alert when a <strong>GET</strong> request is made to the web server, edit <code>/var/ossec/etc/rules/local_rules.xml</code> on the <strong>Wazuh manager</strong>:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="82d06edb-172e-4e00-93dd-bb7a5ac85bc2" class="code"><code class="language-Bash">&lt;group name=&quot;docker-log-rule,&quot;&gt;
+  &lt;rule id=&quot;100009&quot; level=&quot;5&quot;&gt;
+    &lt;field name=&quot;web_action&quot;&gt;&quot;GET / HTTP/1.1&quot; 200&lt;/field&gt;
+    &lt;description&gt;Docker Container: Successful Web GET request on Container: $(program_name) from $(srcip)&lt;/description&gt; &lt;mitre&gt;
+      &lt;id&gt;T1016.001&lt;/id&gt;
+    &lt;/mitre&gt;
+    &lt;group&gt;docker-log-rule,&lt;/group&gt;
+  &lt;/rule&gt;
+&lt;/group&gt;</code></pre><figure id="b4ed6a6b-0e03-451f-9a6e-5b99a40d7953" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2078.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2078.png"/></a></figure><p id="e9c5f571-8f1a-4c92-9411-8939f29c16da" class=""><strong>Restart the Wazuh manager for changes to apply:</strong></p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="fb553a7c-fbaf-414c-b7da-2b405bc2c8f4" class="code"><code class="language-Bash">systemctl restart wazuh-manager</code></pre><figure id="48a68053-00a1-486a-a6e4-9ac2363b56c0" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2079.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2079.png"/></a></figure><p id="2d3d8885-2163-40a2-a5c5-5e4548fc5e22" class="">To trigger alerts for the rule that was created, do a curl request or browse to the web server container <strong>IP</strong> address. In the security events tab of the <strong>Wazuh Dashboard</strong>, we can see an example of a successful <strong>GET</strong> request alert.</p><figure id="acf48c56-fb08-46e7-b2f7-d14732391733" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2080.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2080.png"/></a></figure><figure id="7533185d-11bb-4815-9a33-8e99e2e1e48b" class="image"><a href="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2081.png"><img style="width:708px" src="Detecting%20Vulnerable-Docker-Engine%20e1c1b4f33d8d4136a204948a5bf3d706/Untitled%2081.png"/></a></figure><hr id="a82e46ac-a606-4835-9b83-73864a115dfc"/><h1 id="7f85ed7b-3bf0-428e-9fa4-95530a005594" class="">3. Configuring Vulnerable Docker Engine</h1><p id="3a304863-5749-4c5a-95f9-c4fd775bd5e8" class="">To effectively detect vulnerabilities in <strong>Docker Engine</strong>, particularly those that could allow an attacker to gain <em>root access </em>inside a container, it&#x27;s important to understand the mechanics of the vulnerability and implement robust monitoring strategies. Below, we outline the steps to detect this specific vulnerability using <strong>Wazuh</strong> and other tools.</p><p id="6ae24d77-5de0-42d2-abf6-88389562040c" class=""><strong>Understanding the Vulnerability</strong></p><ol type="1" id="3e74ec37-6457-4c3f-a1bf-78e8686e707f" class="numbered-list" start="1"><li><strong>SUID Bit Setting</strong>: The vulnerability involves setting a<strong> SUID (Set User ID)</strong> bit on <code>/bin/bash</code> within a <strong>Docker</strong> container. This allows the binary to be executed with the privileges of the file owner (usually root), potentially giving an attacker elevated access.</li></ol><ol type="1" id="028bb07d-68ae-461c-b1d9-6b9036ced634" class="numbered-list" start="2"><li><strong>Exploitation</strong>: An attacker can execute a command from the host that accesses the compromised <code>/bin/bash</code> in the container. The command <code>./bin/bash -p</code> can be used to spawn a root shell.</li></ol><hr id="cd658a85-e15a-4ab9-89e7-0758985bde9e"/><h2 id="41b9d7cc-0ac4-4a7f-9fbf-59b33daedb67" class="">3.1 File Integrity Monitoring (FIM) with Wazuh</h2><p id="5df28b3b-f063-41e3-907a-ba7dc9005375" class=""><strong>Objective</strong>: Monitor the Docker container&#x27;s filesystem, particularly for changes that could indicate an exploit, such as setting the SUID bit on <code>/bin/bash</code>.</p><ul id="c53d5a9a-7c22-49f2-8080-7a227833a1bc" class="bulleted-list"><li style="list-style-type:disc"><strong>Monitoring Path</strong>: Use Wazuh&#x27;s FIM module to monitor the path where <strong>Docker</strong> containers&#x27; filesystems are mounted. Typically, this is <code>/var/lib/docker/overlay2/{container_id}/merged/bin/bash</code> or <code>/var/lib/docker/overlay2/</code>. Monitoring these directories can help detect <em>unauthorized changes</em> to the container&#x27;s filesystem.</li></ul><ul id="0f630969-42ed-44e7-b707-d7b4bad4181e" class="bulleted-list"><li style="list-style-type:disc"><strong>Configuration Example</strong>:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="837b1427-6227-44ad-aa8b-9a68bff01e51" class="code"><code class="language-XML" style="white-space:pre-wrap;word-break:break-all">&lt;wazuh_config&gt;
+  &lt;ossec_config&gt;
+    &lt;syscheck&gt;
+	    &lt;directories&gt;/etc,/usr/bin,/usr/sbin&lt;/directories&gt;
+	    &lt;directories&gt;/bin,/sbin,/boot&lt;/directories&gt;
+	    &lt;directories check_all=&quot;yes&quot;&gt;/var/lib/docker/overlay2/*/merged/bin&lt;/directories&gt;
+      &lt;frequency&gt;3600&lt;/frequency&gt;
+      &lt;recursive&gt;yes&lt;/recursive&gt;
+      &lt;check_all&gt;yes&lt;/check_all&gt;
+      &lt;alert_new_files&gt;yes&lt;/alert_new_files&gt;
+      &lt;alert_modified_files&gt;yes&lt;/alert_modified_files&gt;
+    &lt;/syscheck&gt;
+  &lt;/ossec_config&gt;
+&lt;/wazuh_config&gt;
+</code></pre><p id="8670ad5d-61bb-4003-99e7-8da0892aa944" class="">This configuration checks the specified directory every hour for changes and alerts if new files are created or existing files are modified.</p></li></ul><h2 id="05858e1d-8e5f-499f-9395-acedba5b54e1" class="">3.2 Audit Logging with Auditd</h2><p id="7cb48f11-436f-4981-8e91-d88c49d55319" class=""><strong>Objective</strong>: Capture events related to changes in file attributes and permissions, particularly the setting of the <strong>SUID</strong> bit.</p><ul id="e1380c11-dbb1-49fa-8f34-75ae1faf311b" class="bulleted-list"><li style="list-style-type:disc"><strong>Audit Rule Example</strong>:<br/>Add an audit rule to monitor changes to file attributes:<br/><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="63d0dcb2-4003-493c-a201-cf99474f8b89" class="code"><code class="language-Shell" style="white-space:pre-wrap;word-break:break-all">auditctl -w /var/lib/docker/overlay2/ -p wa -k docker_fs_monitor
+</code></pre><ul id="9aa3e90f-252a-47f5-9a9a-30d075bbe5e4" class="bulleted-list"><li style="list-style-type:circle"><code>w /var/lib/docker/overlay2/*/merged/bin</code>: Watch the specified directory.</li></ul><ul id="973d1ace-544a-4b3a-827e-07420e4c96d4" class="bulleted-list"><li style="list-style-type:circle"><code>p wa</code>: Monitor write and attribute changes.</li></ul><ul id="2fd530cf-3f23-42de-9604-e092e7d31047" class="bulleted-list"><li style="list-style-type:circle"><code>k docker_fs_monitor</code>: A custom key to identify the rule in audit logs.</li></ul></li></ul><ul id="f9cb5802-7d6a-4c6f-af58-9e39fe97f839" class="bulleted-list"><li style="list-style-type:disc"><strong>Log Collection</strong>: Ensure that audit logs are forwarded to <strong>Wazuh</strong>. This can be done by configuring the <code>auditd</code> to log to a file that <strong>Wazuh</strong> monitors or by using the <strong>Wazuh agent</strong> to directly read audit logs.</li></ul><h2 id="0b0e8c6d-5f77-46a3-ac24-4cdf3e69d52e" class="">3.3 Alerting and Response</h2><ul id="24607d62-2334-4d08-b7dd-bfb2e5e0b5bc" class="bulleted-list"><li style="list-style-type:disc"><strong>Wazuh Alerts</strong>: Configure <strong>Wazuh</strong> rules to generate alerts when specific changes are detected, such as setting the <strong>SUID</strong> bit. This involves defining rules that look for modifications in critical system binaries or unexpected changes in the <strong>Docker</strong> overlay filesystem.</li></ul><ul id="ce842c17-3954-4866-9e83-bfef4df95203" class="bulleted-list"><li style="list-style-type:disc"><strong>Example Rule</strong>:<br/>In the <br/><strong>Wazuh</strong> ruleset, create a rule to trigger an alert when an audit event indicates a <strong>SUID</strong> bit change:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6e6e8e18-ba22-469e-a62f-d1bbafc29c89" class="code"><code class="language-XML" style="white-space:pre-wrap;word-break:break-all">&lt;rule id=&quot;100001&quot; level=&quot;10&quot;&gt;
+  &lt;decoded_as&gt;auditd&lt;/decoded_as&gt;
+  &lt;field name=&quot;key&quot;&gt;docker_fs_monitor&lt;/field&gt;
+  &lt;description&gt;Possible Docker Engine vulnerability exploit detected&lt;/description&gt;
+&lt;/rule&gt;
+</code></pre></li></ul><p id="6b8f01cf-b9b6-4904-beee-237d4304bea1" class="">This comprehensive setup ensures that any unauthorized changes to the Docker container filesystem, particularly those involving critical binaries like <code>/bin/bash</code>, are detected and alerted upon promptly. Additionally, correlating these alerts with other indicators of compromise can help identify and respond to potential security incidents more effectively.</p><hr id="825ab665-1387-48df-aca0-77612c75bb7a"/><h1 id="f9aefcce-b473-448f-b3a6-6c031882fd75" class="">Conclusion</h1><p id="67bfcce7-c3bb-40a8-90fc-58e992fe62fe" class="">In conclusion, ensuring the security of <strong>Docker</strong> environments requires proactive monitoring and vigilance. By implementing a comprehensive detection strategy using <strong>Wazuh&#x27;s File Integrity Monitoring (FIM) </strong>and <strong>Auditd</strong>, you can effectively guard against <strong>Docker Engine</strong> vulnerabilities, such as <strong>unauthorized SUID</strong> bit changes. This setup provides a robust framework for detecting and alerting on potentially malicious activities, allowing for timely response and mitigation. Through careful monitoring of critical filesystem paths and auditing key events, you can significantly enhance the security posture of your <strong>Docker</strong> infrastructure, safeguarding against unauthorized access and exploitation.</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
